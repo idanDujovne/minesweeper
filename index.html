@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body onload="onInit()">
+    <h1>Mine Sweeper</h1>
+    <div class="menu-container">
+        <button onclick="chooseLevel(1)">Beginner</button>
+        <button onclick="chooseLevel(2)">Medium</button>
+        <button onclick="chooseLevel(3)">Expert</button>
+    </div>
+    <table class="board-container">
+        <tbody class="board"></tbody>
+    </table>
+    <div class="modal">
+        <h2></h2>
+        <button class="reset-btn" onclick="onReset()">Restart</button>
+    </div>
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+    <footer>Idan Dujovne</footer>
+</body>
+
+</html>
