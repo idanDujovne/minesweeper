@@ -1,9 +1,9 @@
 'use strict'
-
+var gLives
 var gBoard
 var gLevel = {
-    size: 8,
-    mines: 14,
+    size: 4,
+    mines: 2,
 }
 var gGame = {
     isOn: true,
@@ -39,6 +39,12 @@ function chooseLevel(opt) {
 }
 
 function onInit() {
+    var elResetBtn = document.querySelector('.reset-btn')
+    elResetBtn.innerText = '😃'
+
+    gLives = 3
+    document.querySelector('.lives-left').innerText = gLives
+
     buildBoard()
     renderBoard(gBoard)
 
@@ -88,11 +94,11 @@ function setMinesNegsCount(board) {
 function renderBoard(board) {
     var strHTML = ''
     var elTable = document.querySelector('.board')
-
+    var isCss = false
     for (var i = 0; i < board.length; i++) {
         strHTML += `<tr>\n`
         for (var j = 0; j < board[i].length; j++) {
-
+            
             const className = `cell cell-${i}-${j}`
             strHTML += `\t<td
                              class="${className}"
@@ -107,13 +113,18 @@ function renderBoard(board) {
 function onCellClicked(elCell, i, j) {
     var currCell = gBoard[i][j]
     if (!gGame.isOn || currCell.isMarked) return null
+
     currCell.isShown = true
     elCell.classList.add('clicked')
 
     if (currCell.isMine) {
-        elCell.isShown = true
-        revealMines(gBoard)
-        gameOver(false)
+        gLives--
+        document.querySelector('.lives-left').innerText = gLives
+        currCell.isMarked = true
+
+        elCell.innerText = '💣'
+        elCell.classList.add('bomb')
+        checkGameOver()
         return
     }
     if (currCell.minesAroundCount === 0) {
@@ -122,30 +133,31 @@ function onCellClicked(elCell, i, j) {
     } else {
         elCell.innerText = currCell.minesAroundCount
     }
-    checkGameOver(true)
+    checkGameOver()
 }
 
-function revealMines(board) {
-    for (var i = 0; i < board.length; i++) {
-        for (var j = 0; j < board[i].length; j++) {
-            var currCell = board[i][j]
-            if (!currCell.isMine) continue
-            var elCell = document.querySelector(`.cell-${i}-${j}`)
-            elCell.innerText = '💣'
-            elCell.classList.add('bomb')
-        }
-    }
-}
+// function revealMines(board) {
+//     for (var i = 0; i < board.length; i++) {
+//         for (var j = 0; j < board[i].length; j++) {
+//             var currCell = board[i][j]
+//             if (!currCell.isMine) continue
+//             var elCell = document.querySelector(`.cell-${i}-${j}`)
+//             elCell.innerText = '💣'
+//             elCell.classList.add('bomb')
+//         }
+//     }
+// }
 
 function onCellMarked(elCell, i, j) {
     document.addEventListener('contextmenu', (e) => {
         e.preventDefault()
     })
+
     var currCell = gBoard[i][j]
-    if (currCell.isShown) return null
+    if (currCell.isShown || !gGame.isOn) return null
     currCell.isMarked = !currCell.isMarked
     elCell.innerText = (currCell.isMarked) ? '🚩' : ''
-    checkGameOver(true)
+    checkGameOver()
 }
 
 function expandShown(board, rowIdx, colIdx) {
@@ -166,7 +178,8 @@ function expandShown(board, rowIdx, colIdx) {
     }
 }
 
-function checkGameOver(isWin) {
+function checkGameOver() {
+    if (gLives === 0) gameOver(false)
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[i].length; j++) {
             var currCell = gBoard[i][j]
@@ -174,26 +187,29 @@ function checkGameOver(isWin) {
                 if (currCell.isMarked && currCell.isMine) continue
                 return null
             }
-
         }
     }
-    gameOver(isWin)
+    gameOver(true)
 }
 
 function gameOver(isWin) {
     gGame.isOn = false
     var elModal = document.querySelector('.modal')
-    var elH2 = document.querySelector('.modal h2')
+    var elResetBtn = document.querySelector('.reset-btn')
     elModal.classList.remove('hide')
     if (isWin) {
-        elH2.innerText = 'You Win!'
+        elModal.innerText = 'You Win!'
+        elResetBtn.innerText = '😎'
     } else {
-        elH2.innerText = 'Maybe Next Time...'
+        elModal.innerText = 'Maybe Next Time...'
+        elResetBtn.innerText = '🤯'
     }
     console.log('Game Over')
 }
 
 function onReset() {
+
+
     gGame = {
         isOn: true,
         shownCount: 0,

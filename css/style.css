@@ -12,6 +12,18 @@ h1 {
     margin-bottom: 2rem;
 }
 
+.beginner-btn:hover {
+    cursor: pointer;
+}
+
+.medium-btn:hover {
+    cursor: pointer;
+}
+
+.expert-btn:hover {
+    cursor: pointer;
+}
+
 table {
     margin: 0 auto;
 }
@@ -20,12 +32,12 @@ td {
     height: 30px;
     width: 30px;
     text-align: center;
+    background-color: lightblue;
     transition: 0.25s;
 }
 
 td:hover {
     cursor: pointer;
-    /* background-color: lightgrey; */
 }
 
 table,
@@ -35,7 +47,7 @@ td {
 }
 
 .clicked {
-    background-color: grey;
+    background-color: cyan;
 }
 
 .bomb {
@@ -46,6 +58,11 @@ td {
     display: none;
 }
 
-.modal {
+.end-of-game {
     text-align: center;
+    margin-top: 15px;
+}
+
+.reset-btn:hover {
+    cursor: pointer;
 }

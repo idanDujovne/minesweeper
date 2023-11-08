@@ -11,16 +11,17 @@
 <body onload="onInit()">
     <h1>Mine Sweeper</h1>
     <div class="menu-container">
-        <button onclick="chooseLevel(1)">Beginner</button>
-        <button onclick="chooseLevel(2)">Medium</button>
-        <button onclick="chooseLevel(3)">Expert</button>
+        <h2>LIVES LEFT: <span class="lives-left">3</span></h2>
+        <button class="beginner-btn" onclick="chooseLevel(1)">Beginner</button>
+        <button class="medium-btn" onclick="chooseLevel(2)">Medium</button>
+        <button class="Expert" onclick="chooseLevel(3)">Expert</button>
     </div>
     <table class="board-container">
         <tbody class="board"></tbody>
     </table>
-    <div class="modal">
-        <h2></h2>
-        <button class="reset-btn" onclick="onReset()">Restart</button>
+    <div class="end-of-game">
+        <button class="reset-btn" onclick="onReset()">😃</button>
+        <h2 class="modal"></h2>
     </div>
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
