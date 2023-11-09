@@ -11,10 +11,12 @@
 <body onload="onInit()">
     <h1>Mine Sweeper</h1>
     <div class="menu-container">
-        <h2>LIVES LEFT: <span class="lives-left">3</span></h2>
-        <button class="beginner-btn" onclick="chooseLevel(1)">Beginner</button>
-        <button class="medium-btn" onclick="chooseLevel(2)">Medium</button>
-        <button class="Expert" onclick="chooseLevel(3)">Expert</button>
+        <div class="lives">
+            <h2>LIVES LEFT: <span class="lives-left"></span></h2>
+            <button class="beginner-btn" onclick="chooseLevel(1)">Beginner</button>
+            <button class="medium-btn" onclick="chooseLevel(2)">Medium</button>
+            <button class="Expert" onclick="chooseLevel(3)">Expert</button>
+        </div>
     </div>
     <table class="board-container">
         <tbody class="board"></tbody>

@@ -2,12 +2,22 @@
     box-sizing: border-box;
 }
 
+html {
+    background: url('/img/space.jpeg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 h1 {
     font-family: sans-serif;
     text-align: center;
+    color: white;
 }
 
 .menu-container {
+    color: white;
     text-align: center;
     margin-bottom: 2rem;
 }
@@ -24,34 +34,33 @@ h1 {
     cursor: pointer;
 }
 
+.special-btns {
+    margin-top: 5px;
+}
+
 table {
     margin: 0 auto;
 }
 
 td {
-    height: 30px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
     text-align: center;
-    background-color: lightblue;
+    background-color: rgb(33, 70, 145);
     transition: 0.25s;
+    border-radius: 10%;
 }
 
 td:hover {
     cursor: pointer;
 }
 
-table,
-td {
-    border: 1px solid;
-    border-collapse: collapse;
-}
-
 .clicked {
-    background-color: cyan;
+    background-color: rgb(0, 55, 255);
 }
 
 .bomb {
-    background-color: red;
+    background-color: rgb(121, 22, 22);
 }
 
 .hide {
@@ -61,8 +70,24 @@ td {
 .end-of-game {
     text-align: center;
     margin-top: 15px;
+    color: white;
+}
+
+.reset-btn {
+    border: none;
+    background: none;
+    font-size: x-large;
+
 }
 
 .reset-btn:hover {
     cursor: pointer;
+
+}
+
+footer {
+    color: white;
+    position: absolute;
+    bottom: 0px;
+    font-size: larger;
 }
