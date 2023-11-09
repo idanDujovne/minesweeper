@@ -119,7 +119,7 @@ function onCellClicked(elCell, i, j) {
     if (!gGame.isOn || currCell.isMarked) return null
 
     if (gIsFirstClick) {
-        randomMines(gBoard, {i, j})
+        randomMines(gBoard, { i, j })
         setMinesNegsCount(gBoard)
         gIsFirstClick = false
     }
@@ -147,7 +147,6 @@ function onCellClicked(elCell, i, j) {
 }
 
 function revealCells(rowIdx, colIdx) {
-    console.log('hi');
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
@@ -159,7 +158,6 @@ function revealCells(rowIdx, colIdx) {
             revealCell(i, j)
         }
     }
-    gIsHintOn = false
 }
 
 function revealCell(i, j) {
@@ -177,10 +175,6 @@ function revealCell(i, j) {
         }
     }
     gIsReveal = !gIsReveal
-}
-
-function unRevealCells(rowIdx, colIdx) {
-
 }
 
 function onCellMarked(elCell, i, j) {
@@ -205,8 +199,6 @@ function expandShown(board, rowIdx, colIdx) {
             var currCell = board[i][j]
             if (currCell.isMarked) continue
             currCell.isShown = true
-            
-            if(currCell.minesAroundCount === 0) expandShown(board, currCell.i, currCell.j)
 
             var elCurrCell = document.querySelector(`.cell-${i}-${j}`)
             elCurrCell.innerText = (currCell.minesAroundCount > 0) ? currCell.minesAroundCount : ''
@@ -244,8 +236,6 @@ function gameOver(isWin) {
 }
 
 function onReset() {
-
-
     gGame = {
         isOn: true,
         shownCount: 0,
