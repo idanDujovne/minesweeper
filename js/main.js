@@ -12,9 +12,7 @@ var gGame = {
     markedCount: 0,
     secsPassed: 0,
 }
-
-var gIsHintOn = false
-var gIsReveal = true
+var gIsFirstClick
 
 function chooseLevel(opt) {
     switch (opt) {
@@ -46,6 +44,7 @@ function onInit() {
     var elResetBtn = document.querySelector('.reset-btn')
     elResetBtn.innerText = '😃'
 
+    gIsFirstClick = true
     gLives = 3
     document.querySelector('.lives-left').innerText = gLives
 
@@ -71,13 +70,16 @@ function buildBoard() {
             gBoard[i].push(currCell)
         }
     }
-    randomMines(gBoard)
-    setMinesNegsCount(gBoard)
 }
 
-function randomMines(board) {
+function randomMines(board, safeLocation) {
     for (var i = 0; i < gLevel.mines; i++) {
         var mineLocation = getRandomEmptyCell(board)
+
+        if (mineLocation.i === safeLocation.i && mineLocation.j === safeLocation.j) {
+            i--
+            continue
+        }
         gBoard[mineLocation.i][mineLocation.j].isMine = true
     }
 }
@@ -115,6 +117,12 @@ function renderBoard(board) {
 function onCellClicked(elCell, i, j) {
     var currCell = gBoard[i][j]
     if (!gGame.isOn || currCell.isMarked) return null
+
+    if (gIsFirstClick) {
+        randomMines(gBoard, {i, j})
+        setMinesNegsCount(gBoard)
+        gIsFirstClick = false
+    }
 
     currCell.isShown = true
     elCell.classList.add('clicked')
@@ -197,6 +205,8 @@ function expandShown(board, rowIdx, colIdx) {
             var currCell = board[i][j]
             if (currCell.isMarked) continue
             currCell.isShown = true
+            
+            if(currCell.minesAroundCount === 0) expandShown(board, currCell.i, currCell.j)
 
             var elCurrCell = document.querySelector(`.cell-${i}-${j}`)
             elCurrCell.innerText = (currCell.minesAroundCount > 0) ? currCell.minesAroundCount : ''

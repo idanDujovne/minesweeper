@@ -2,12 +2,8 @@
     box-sizing: border-box;
 }
 
-html {
-    background: url('/img/space.jpeg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+body {
+    background-color: rgba(0, 0, 0, 0.849);
 }
 
 h1 {
@@ -38,7 +34,13 @@ h1 {
     margin-top: 5px;
 }
 
+table,td {
+    /* border: solid grey; */
+    border-collapse: collapse;
+}
+
 table {
+    border: 5px solid grey;
     margin: 0 auto;
 }
 
@@ -46,9 +48,10 @@ td {
     height: 32px;
     width: 32px;
     text-align: center;
-    background-color: rgb(33, 70, 145);
+    background-color: rgb(170, 172, 174);
     transition: 0.25s;
     border-radius: 10%;
+    border:solid grey;
 }
 
 td:hover {
@@ -56,11 +59,11 @@ td:hover {
 }
 
 .clicked {
-    background-color: rgb(0, 55, 255);
+    background-color: rgb(147, 148, 149);
 }
 
 .bomb {
-    background-color: rgb(121, 22, 22);
+    background-color: rgb(188, 18, 18);
 }
 
 .hide {
