@@ -5,6 +5,7 @@ var gBoard
 var gLevel = {
     size: 4,
     mines: 2,
+    cells: 16,
 }
 var gGame = {
     isOn: true,
@@ -13,6 +14,7 @@ var gGame = {
     secsPassed: 0,
 }
 var gIsFirstClick
+var gMarksLeft
 
 function chooseLevel(opt) {
     switch (opt) {
@@ -20,6 +22,7 @@ function chooseLevel(opt) {
             gLevel = {
                 size: 4,
                 mines: 2,
+                cells: 16,
             }
             break
 
@@ -27,6 +30,7 @@ function chooseLevel(opt) {
             gLevel = {
                 size: 8,
                 mines: 14,
+                cells: 64,
             }
             break
 
@@ -34,6 +38,7 @@ function chooseLevel(opt) {
             gLevel = {
                 size: 12,
                 mines: 32,
+                cells: 144,
             }
             break
     }
@@ -43,6 +48,10 @@ function chooseLevel(opt) {
 function onInit() {
     var elResetBtn = document.querySelector('.reset-btn')
     elResetBtn.innerText = '😃'
+
+    var elMarkedCells = document.querySelector('.marks-count')
+    elMarkedCells.innerText = gLevel.mines
+    gMarksLeft = gLevel.mines
 
     gIsFirstClick = true
     gLives = 3
@@ -105,9 +114,9 @@ function renderBoard(board) {
 
             const className = `cell cell-${i}-${j}`
             strHTML += `\t<td
-                             class="${className}"
-                              oncontextmenu="onCellMarked(this, ${i}, ${j})"
-                              onclick="onCellClicked(this, ${i}, ${j})" ></td\n>`
+            class="${className}"
+            oncontextmenu="onCellMarked(this, ${i}, ${j})"
+            onclick="onCellClicked(this, ${i}, ${j})" ></td\n>`
         }
         strHTML += `</td>\n`
     }
@@ -131,9 +140,14 @@ function onCellClicked(elCell, i, j) {
         gLives--
         document.querySelector('.lives-left').innerText = gLives
         currCell.isMarked = true
-
+        
         elCell.innerText = '💣'
         elCell.classList.add('bomb')
+        
+        gMarksLeft--
+        var elMarksCount = document.querySelector('.marks-count')
+        elMarksCount.innerText = gMarksLeft
+        
         checkGameOver()
         return
     }
@@ -142,50 +156,31 @@ function onCellClicked(elCell, i, j) {
         expandShown(gBoard, i, j)
     } else {
         elCell.innerText = currCell.minesAroundCount
+        colorNum(elCell, currCell)
     }
     checkGameOver()
-}
-
-function revealCells(rowIdx, colIdx) {
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (j < 0 || j >= gBoard[i].length) continue
-
-            var currCell = gBoard[i][j]
-            if (currCell.isShown || currCell.isMarked) continue
-
-            revealCell(i, j)
-        }
-    }
-}
-
-function revealCell(i, j) {
-    var elCell = document.querySelector(`.cell-${i}-${j}`)
-    if (gBoard[i][j].isMine) {
-        elCell.classList.toggle('bomb')
-        elCell.innerText = (gIsReveal) ? '💣' : ''
-    } else {
-        elCell.classList.toggle('clicked')
-
-        if (gBoard[i][j].minesAroundCount > 0 && gIsReveal) {
-            elCell.innerText = gBoard[i][j].minesAroundCount
-        } else {
-            elCell.innerText = ''
-        }
-    }
-    gIsReveal = !gIsReveal
 }
 
 function onCellMarked(elCell, i, j) {
     document.addEventListener('contextmenu', (e) => {
         e.preventDefault()
     })
-
     var currCell = gBoard[i][j]
     if (currCell.isShown || !gGame.isOn) return null
+    
+    if (currCell.isMarked) {
+        gMarksLeft++
+        elCell.innerText = ''
+
+    } else {
+        if (gMarksLeft === 0) return null
+        gMarksLeft--
+        elCell.innerText = '🚩'
+    }
     currCell.isMarked = !currCell.isMarked
-    elCell.innerText = (currCell.isMarked) ? '🚩' : ''
+    var elMarksCount = document.querySelector('.marks-count')
+    elMarksCount.innerText = gMarksLeft
+
     checkGameOver()
 }
 
@@ -197,14 +192,26 @@ function expandShown(board, rowIdx, colIdx) {
             if (i === rowIdx && j === colIdx) continue
 
             var currCell = board[i][j]
-            if (currCell.isMarked) continue
+            if (currCell.isMarked || currCell.isShown) continue
             currCell.isShown = true
 
             var elCurrCell = document.querySelector(`.cell-${i}-${j}`)
             elCurrCell.innerText = (currCell.minesAroundCount > 0) ? currCell.minesAroundCount : ''
             elCurrCell.classList.add('clicked')
+
+            colorNum(elCurrCell, currCell)
+
+            if (currCell.minesAroundCount === 0) expandShown(gBoard, i, j)
         }
     }
+}
+
+function colorNum(elCell, currCell) {
+    if (currCell.minesAroundCount === 1) elCell.style.color = 'blue'
+    if (currCell.minesAroundCount === 2) elCell.style.color = 'green'
+    if (currCell.minesAroundCount === 3) elCell.style.color = 'red'
+    if (currCell.minesAroundCount === 4) elCell.style.color = 'darkblue'
+    if (currCell.minesAroundCount === 5) elCell.style.color = 'darkred'
 }
 
 function checkGameOver() {
